@@ -51,6 +51,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = URL.create(
     port=int(os.environ['DB_PORT']),
     database=os.environ['DB_NAME'],
 )
+print("DATABASE CONNECTION CHECK", flush=True)
+print("HOST:", os.getenv("DB_HOST"), flush=True)
+print("PORT:", os.getenv("DB_PORT"), flush=True)
+print("USER:", os.getenv("DB_USER"), flush=True)
+print("DATABASE:", os.getenv("DB_NAME"), flush=True)
+print("PASSWORD LENGTH:", len(os.getenv("DB_PASSWORD", "")), flush=True)
 
 CA_CERTIFICATE = BASE_DIR / 'ca.pem'
 if not CA_CERTIFICATE.is_file():
