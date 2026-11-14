@@ -51,12 +51,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = URL.create(
     port=int(os.environ['DB_PORT']),
     database=os.environ['DB_NAME'],
 )
-print("DATABASE CONNECTION CHECK", flush=True)
-print("HOST:", os.getenv("DB_HOST"), flush=True)
-print("PORT:", os.getenv("DB_PORT"), flush=True)
-print("USER:", os.getenv("DB_USER"), flush=True)
-print("DATABASE:", os.getenv("DB_NAME"), flush=True)
-print("PASSWORD LENGTH:", len(os.getenv("DB_PASSWORD", "")), flush=True)
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'connect_args': {
+        'ssl': {
+            'ca': str(BASE_DIR / 'ca.pem')
+        }
+    }
+}
 
 CA_CERTIFICATE = BASE_DIR / 'ca.pem'
 if not CA_CERTIFICATE.is_file():
@@ -65,17 +66,18 @@ if not CA_CERTIFICATE.is_file():
         'from your Aiven MySQL service.'
     )
 
+
+# Railway MySQL configuration
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_pre_ping': True,
     'pool_recycle': 240,
     'connect_args': {
-        'ssl_ca': str(CA_CERTIFICATE),
-        'ssl_verify_cert': True,
-        'ssl_verify_identity': True,
-        'connect_timeout': 10,
-    },
+        'connect_timeout': 10
+    }
 }
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
