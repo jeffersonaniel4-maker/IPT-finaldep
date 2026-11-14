@@ -1,4 +1,4 @@
-import datetime
+﻿import datetime
 import os
 import uuid
 import secrets
@@ -852,7 +852,7 @@ def customers():
     query = Customer.query
     if search:
         query = query.filter(Customer.name.contains(search) | Customer.phone.contains(search))
-    return render_template('customers.html', customers=query.all(), search=search)
+    return render_template('customer.html', customers=query.all(), search=search)
 
 # --- REPORTS ---
 @app.route('/reports/sales')
@@ -1036,5 +1036,6 @@ def revoke_invite(token_id):
 if __name__ == '__main__':
     init_db()
     app.run(debug=os.environ.get('FLASK_DEBUG') == '1')
+
 
 
